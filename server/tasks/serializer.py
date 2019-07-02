@@ -4,7 +4,7 @@ from . import task
 STATUSES = ['New', 'Processing', 'Done']
 class TaskSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=256)
+    content = serializers.StringRelatedField()
     status = serializers.ChoiceField(choices=STATUSES, default='New')
 
     def create(self, validated_data):

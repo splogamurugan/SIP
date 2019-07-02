@@ -2,3 +2,5 @@ django
 coverage
 djangorestframework
 django-cors-headers
+redis
+rq
