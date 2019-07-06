@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Dashboard from './components/Dashboard'
+import Create from './components/Create'
+import Workers from './components/Workers'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Tasks</h2>
+      <div className="row">
+        <div className="col-md-8">
+          <Dashboard />
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div className="col-md-4">
+          <Create />
+          <br />
+          <Workers />
+          <br />
+
+          <div className="card">
+            <div className="card-header">Stats</div>
+            <div className="card-body">Goes here</div> 
+          </div>
+
+
+        </div>
       </div>
     );
   }

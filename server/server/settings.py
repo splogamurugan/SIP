@@ -124,7 +124,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 REDIS_URL = 'redis://localhost:6379/0'

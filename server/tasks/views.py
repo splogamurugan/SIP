@@ -4,28 +4,25 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from . import serializer
 from .task import Task
-
+from rest_framework.decorators import api_view
 from tasks.redisqueue import RedisQueue
 from django.conf import settings
 
 import json
 from json.decoder import JSONDecodeError
 
-
-tasks = {
-    1: Task(id=1, name='Demo', status='Done'),
-    2: Task(id=2, name='Model less demo', status='Process'),
-    3: Task(id=3, name='Sleep more', status='New'),
-}
-
-
 class TaskViewSet(viewsets.ViewSet):
     serializer_class = serializer.TaskSerializer
     redisq = RedisQueue(settings.REDIS_URL)    
 
     def list(self, request):
-        #global serializer
-        tasks = self.redisq.queued_jobs()
+
+        tasks = getattr(
+            self.redisq, 
+            str(request.GET.get('status'))+'_jobs',
+            self.redisq.queued_jobs
+        )()
+        
         ser = serializer.TaskSerializer(
             instance=tasks, 
             many=True
@@ -82,11 +79,36 @@ class TaskViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-            
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # Create your views here.
+@api_view(['PUT', 'POST'])
+def bulk(request):
+    #print(request.POST['json_data'])
 
-def index(request):
-    context = {}
-    return render(request, 'index.html', context=context)
+    try:
+        arg = request.POST['json_data']
+        arg = arg.replace("'", "\"")
+        arg = json.loads(arg)
+
+        if type(arg) != list:
+            arg = [arg]
+
+        for item in arg:
+            #print(item)
+            RedisQueue(settings.REDIS_URL).enqueue(item)
+        return Response({"status":"success"}, status=status.HTTP_201_CREATED)
+    except JSONDecodeError as e:
+        return Response({'status':'error', 'message':e}, status=status.HTTP_400_BAD_REQUEST)
+    except KeyError:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except TypeError:
+        return Response({'status':'error', 'message':"Please give JSON in array format"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def workers(request):
+    data = RedisQueue(settings.REDIS_URL).workers()
+    return Response(data)
+    #return Response(status=status.HTTP_404_NOT_FOUND)
+

@@ -17,11 +17,12 @@ class TaskSerializer(serializers.Serializer):
 
 
     def create(self, validated_data):
-        print(validated_data)
         task = redish.enqueue(validated_data)
         return task
 
+    '''
     def update(self, instance, validated_data):
         for field, value in validated_data.items():
             setattr(instance, field, value)
         return instance
+    '''

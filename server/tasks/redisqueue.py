@@ -5,6 +5,9 @@ from rq.job import Job, JobStatus
 from rq.registry import (DeferredJobRegistry, FailedJobRegistry,
                          FinishedJobRegistry, StartedJobRegistry)
 from rq.exceptions import NoSuchJobError, InvalidJobOperation
+from random import randint
+
+
 
 class RedisQueue():
     conn = None
@@ -55,6 +58,9 @@ class RedisQueue():
         with Connection(redish):
             worker = Worker(['default'])
             worker.work()
+    
+    def active_jobs(self):
+        return (self.started_jobs() + self.queued_jobs())
         
     def queued_jobs(self):
         jobs = []
@@ -136,6 +142,13 @@ class RedisQueue():
         return {
             'status': 'error',
         }
+    
+    def testing_bulk_add(self, nums):
+        for _ in range(int(nums)):
+            self.enqueue({"id": randint(0, 3000)})
+        return {
+            'status': f'{nums} of items have been added to the queue'
+        }
 
     def update(self, task_id):
 
@@ -145,7 +158,5 @@ class RedisQueue():
         all_workers = []
         with Connection(redis.from_url(self.url)):
             all_workers = Worker.all()
-            all_workers = [ {"name": worker.name} for worker in all_workers]
-        return {
-            "data": all_workers
-        }
+            all_workers = [ {"name": worker.name, "state": worker.get_state(), "birth_date": worker.birth_date.strftime("%Y-%m-%d %H:%M:%S"), "pid": worker.pid} for worker in all_workers]
+        return all_workers
