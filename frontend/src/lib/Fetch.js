@@ -28,6 +28,16 @@ class Fetch {
         .then(cb)
     }
 
+    stats = (param, cb) => {
+        fetch(this.url+ 'stats' + param, {headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }}
+        )
+        .then(response => response.json())
+        .then(cb)
+    }
+
 
     post = (data, cb, vcb) => {
 

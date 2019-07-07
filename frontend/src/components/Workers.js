@@ -8,11 +8,16 @@ class Workers extends Component {
     }
 
     status = {
-        "idle": "secondary",
-        "busy": "success"
+        "?": ["", "btn-secondary"],
+        "idle": ["", "btn-secondary"],
+        "busy": ["spinner-grow spinner-grow-sm", "btn-success"]
     }
 
     componentDidMount = () => {
+        fetchData.workers('', (data)=>{
+            this.setState({'workers': data})
+        })
+        
         this.timeinterval = setInterval(() => {
             fetchData.workers('', (data)=>{
                 this.setState({'workers': data})
@@ -48,9 +53,10 @@ class Workers extends Component {
                             <td>{worker.name.slice(0,10)}</td>
                             <td>{worker.birth_date}</td>
                             <td>
-                                <div className={"spinner-grow text-" + this.status[worker.state] } role="status">
-                                <span className="sr-only">Loading...</span>
-                                </div>
+                                <button className={"btn "+this.status[worker.state][1]} type="button" disabled>
+                                <span className={this.status[worker.state][0]} role="status" aria-hidden="true"></span>
+                                {worker.state}
+                                </button>
                             </td>
                         </tr>
                     )

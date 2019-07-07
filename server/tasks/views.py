@@ -110,5 +110,11 @@ def bulk(request):
 def workers(request):
     data = RedisQueue(settings.REDIS_URL).workers()
     return Response(data)
+
+@api_view(['GET'])
+def stats(request):
+    data = RedisQueue(settings.REDIS_URL).stats()
+    return Response(data)
+
     #return Response(status=status.HTTP_404_NOT_FOUND)
 

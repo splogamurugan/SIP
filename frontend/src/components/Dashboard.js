@@ -10,6 +10,10 @@ class Dashboard extends Component {
         "isLoading": false
     }
 
+    props = {
+        'stat_items':{}
+    }
+
     setStatusHandler = (status) => {
         this.setState({"status":status})
     }
@@ -22,7 +26,7 @@ class Dashboard extends Component {
         return (
             <div className="card">
                 <div className="card-header">
-                    <Navbar setLoadingHandler={this.setLoadingHandler} setStatusHandler={this.setStatusHandler} status={this.state.status} />
+                    <Navbar stat_items={this.props.stat_items} setLoadingHandler={this.setLoadingHandler} setStatusHandler={this.setStatusHandler} status={this.state.status} />
                     <Spinner spin={this.state.isLoading} />
                 </div>
                 <div className="card-body">

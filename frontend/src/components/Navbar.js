@@ -6,6 +6,7 @@ class Navbar extends Component {
 
     props = {
         "status":"active",
+        'stat_items' : {}
     }
 
     handleStatus =  (status) => {
@@ -22,12 +23,13 @@ class Navbar extends Component {
             {"itemId": "active", "itemName":"Active"},
             {"itemId": "started", "itemName":"Started"},
             {"itemId": "finished", "itemName":"Finished"},
-            {"itemId": "failed", "itemName":"Failed"}
+            {"itemId": "deferred", "itemName":"Deferred"},
+            {"itemId": "failed", "itemName":"Failed"},
         ]
         return (
             <ul className="nav nav-pills card-header-pills float-left">
                 {navitems.map( item => 
-                    <Navitem onClickHandler={this.clickHandler} key={item.itemId} handleStatus={this.handleStatus} status={this.props.status} {...item} />
+                    <Navitem count={this.props.stat_items[item.itemId+'_jobs']} onClickHandler={this.clickHandler} key={item.itemId} handleStatus={this.handleStatus} status={this.props.status} {...item} />
                 )}
             </ul>
         )

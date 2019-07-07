@@ -4,4 +4,3 @@ djangorestframework
 django-cors-headers
 redis
 rq
-json

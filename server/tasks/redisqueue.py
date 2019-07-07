@@ -156,7 +156,36 @@ class RedisQueue():
     
     def workers(self):
         all_workers = []
+        def fmt(spec):
+            return 'N/A'
+
         with Connection(redis.from_url(self.url)):
             all_workers = Worker.all()
-            all_workers = [ {"name": worker.name, "state": worker.get_state(), "birth_date": worker.birth_date.strftime("%Y-%m-%d %H:%M:%S"), "pid": worker.pid} for worker in all_workers]
+            all_workers = [ {"name": worker.name, "state": worker.get_state(), "birth_date": getattr(worker.birth_date, 'strftime', fmt)("%Y-%m-%d %H:%M:%S"), "pid": worker.pid} for worker in all_workers]
         return all_workers
+    
+    def stats(self):
+        
+        queue_data = {}
+        workers = self.workers()
+        queued = self.queued_jobs()
+
+        with Connection(redis.from_url(self.url)):
+            q = Queue()
+            q.connection
+            finished_job_registry = FinishedJobRegistry()
+            started_jobs_registry = StartedJobRegistry()
+            deferred_jobs_registry = DeferredJobRegistry()
+            failed_jobs_registry = FailedJobRegistry()
+            worker = Worker(['default'])
+            
+            queue_data['finished_jobs'] =  len(finished_job_registry)
+            
+            queue_data['started_jobs']  = len(started_jobs_registry)
+            queue_data['deferred_jobs']  = len(deferred_jobs_registry)
+            queue_data['failed_jobs']  = len(deferred_jobs_registry)
+            queue_data['workers']     = len(workers)
+            queue_data['queued_jobs'] = len(queued)
+            queue_data['active_jobs'] =  queue_data['started_jobs']+queue_data['queued_jobs']
+
+        return queue_data

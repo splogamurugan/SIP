@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 
+
 class Navitem extends Component {
     props = {
         itemName : "Active",
@@ -14,7 +15,10 @@ class Navitem extends Component {
 
     render = () => (
         <li className="nav-item">
-            <a href="#" onClick={this.clickHandler} className={(this.props.status === this.props.itemId) ? 'nav-link active' : 'nav-link' }>{this.props.itemName}</a>
+            <a href="#" onClick={this.clickHandler} className={(this.props.status === this.props.itemId) ? 'nav-link active' : 'nav-link' }>
+            {this.props.itemName}&nbsp;
+            <span class={"badge badge-" + ((this.props.status === this.props.itemId) ? 'light' : 'primary') }>{this.props.count}</span>
+            </a>
         </li>
     )
 }
