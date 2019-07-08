@@ -24,10 +24,13 @@ class RedisQueue():
         }
 
 
-    def enqueue(self, content:dict):
+    def enqueue(self, job_handler, content:dict):
         with Connection(redis.from_url(self.url)):
             q = Queue()
-            task = q.enqueue(processor.processor, kwargs=content)
+            arguments = {}
+            arguments['job_handler'] = job_handler
+            arguments['arguments'] = content
+            task = q.enqueue(processor.processor, kwargs=arguments)
         return {
             'status': 'success',
             'data': self.__getdata(task)
@@ -183,7 +186,7 @@ class RedisQueue():
             
             queue_data['started_jobs']  = len(started_jobs_registry)
             queue_data['deferred_jobs']  = len(deferred_jobs_registry)
-            queue_data['failed_jobs']  = len(deferred_jobs_registry)
+            queue_data['failed_jobs']  = len(failed_jobs_registry)
             queue_data['workers']     = len(workers)
             queue_data['queued_jobs'] = len(queued)
             queue_data['active_jobs'] =  queue_data['started_jobs']+queue_data['queued_jobs']

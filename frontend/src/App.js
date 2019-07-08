@@ -39,9 +39,7 @@ class App extends Component {
         </div>
         <div className="col-md-4">
           <Create />
-          <br />
           <Workers />
-          <br />
           <Stats stat_items={this.state.stat_items} />
         </div>
       </div>

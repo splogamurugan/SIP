@@ -5,6 +5,7 @@ from os import path, getcwd, scandir
 import importlib
 import sys
 import inspect
+from importlib import util
 
 class JobsSpecs():
     folder_to_lookup = ''
@@ -19,14 +20,13 @@ class JobsSpecs():
         files = scandir(self.folder_to_lookup)
         exception_files = ['JobsAbstract.py', 'JobsSpecs.py', '__pycache__', 'JobsException.py']
         self.handlers = [i for i in files if i.name not in exception_files]
-    
-    def __get_ins(self, file_name:str, file_path:str):
         
+    def __get_ins(self, file_name:str, file_path:str):
         __ins = None
 
         try:
-            handler_spec = importlib.util.spec_from_file_location(file_name, file_path)
-            handler_module = importlib.util.module_from_spec(handler_spec)
+            handler_spec = util.spec_from_file_location(file_name, file_path)
+            handler_module = util.module_from_spec(handler_spec)
             handler_spec.loader.exec_module(handler_module)
             handler_name = file_name[:-3] #exclusion of .py - need to find a better way
             __class = getattr(handler_module, handler_name)
@@ -64,6 +64,6 @@ class JobsSpecs():
         
         return res
 
-l =  JobsSpecs()
-print(l.jobs())
-l.handle(name='Dummy.py', **{"module":'OP', "json_data": {"d":"d"}})
+if __name__ == "__main__":
+    l =  JobsSpecs()
+    l.handle(name='Sugar.py', **{"module":'OP', "json_data": {"d":"d"}})

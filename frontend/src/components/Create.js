@@ -30,7 +30,14 @@ class Create extends Component {
         Fetch.handlers((data)=>{
             this.setState({'jobs':data})
             if (data.length > 0) {
-                this.setState({'job_help':data[0]['arguments']})
+                this.setState({
+                    'job_help': data[0]['arguments'],
+                })
+
+                const fields = this.state.fields
+                fields['job'] = data[0]['name']
+                this.setState({ fields })
+
             }
         }, (validation_err) => {
             this.showAlertMessage('danger', 'Not able to fetch jobs!')
@@ -56,6 +63,7 @@ class Create extends Component {
 
     validate = () => {
         const err = {}
+        console.log(this.state.fields)
         if (!this.isValidJson(this.state.fields.arguments)) {
             err['arguments'] = 'Invalid JSON!';
         }
@@ -83,7 +91,7 @@ class Create extends Component {
                 this.showAlertMessage('success', 'Successfully Added')
             }
         }, (validation_err) => {
-            this.showAlertMessage('danger', validation_err)
+            this.showAlertMessage('danger', validation_err.message)
         })
 
         evt.preventDefault();
@@ -101,6 +109,17 @@ class Create extends Component {
         const fields = this.state.fields
         fields[evt.target.name] = evt.target.value
         this.setState({ fields })
+
+        if (evt.target.name === 'job') {
+            const job_arguments = this.state.jobs
+            let selected_job_arg = job_arguments.filter( 
+                job => evt.target.value === job.name
+            )
+            if (selected_job_arg.length > 0) {
+                this.setState({job_help: selected_job_arg[0]['arguments']})
+                //console.log(this.state.job_help[0])
+            }
+        }
     }
 
     render() {
@@ -113,11 +132,9 @@ class Create extends Component {
                         <div className="form-group">
                             <label htmlFor="sel1">Job Name:</label>
                             <select name="job" onChange={this.onInputChange} className="form-control" id="sel1">
-                                {
-                                    this.state.jobs.map((job,i)=>
-                                        <option key={i} value={job.name}>{job.name.slice(0, -3)}</option>
-                                    )
-                                }
+                            {this.state.jobs.map((job,i)=>
+                                <option data-args={job.arguments} key={i} value={job.name}>{job.name.slice(0, -3)}</option>
+                            )}
                             </select>
                         </div>
                         

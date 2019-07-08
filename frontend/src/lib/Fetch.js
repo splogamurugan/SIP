@@ -54,7 +54,10 @@ class Fetch {
     post = (data, cb, vcb) => {
 
         let formData = new FormData();
-        formData.append('json_data', data['json_data']);
+        for(let item in data) {
+            formData.append(item, data[item]);
+        }
+        //formData.append('json_data', data['json_data']);
 
         fetch(this.url+'bulk', {
             method: 'POST', 

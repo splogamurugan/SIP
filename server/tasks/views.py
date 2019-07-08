@@ -95,16 +95,17 @@ def bulk(request):
     #print(request.POST['json_data'])
 
     try:
+        job_handler = request.POST['job']
+        print(job_handler)
         arg = request.POST['arguments']
         arg = arg.replace("'", "\"")
         arg = json.loads(arg)
-
         if type(arg) != list:
             arg = [arg]
 
         for item in arg:
-            #print(item)
-            RedisQueue(settings.REDIS_URL).enqueue(item)
+            RedisQueue(settings.REDIS_URL).enqueue(job_handler, content=item)
+            
         return Response({"status":"success"}, status=status.HTTP_201_CREATED)
     except JSONDecodeError as e:
         return Response({'status':'error', 'message':e}, status=status.HTTP_400_BAD_REQUEST)

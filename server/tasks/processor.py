@@ -1,4 +1,10 @@
 import time
-def processor(**kwargs):
-    time.sleep(2)
-    return True
+import sys
+from os import path
+sys.path.append(path.join(path.dirname(path.abspath(__file__)), 'jobs'))
+from JobsSpecs import JobsSpecs
+
+def processor(job_handler, arguments:dict):
+    j = JobsSpecs()
+    res = j.handle(name=job_handler, **arguments)
+    return res
