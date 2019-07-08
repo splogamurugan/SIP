@@ -38,6 +38,18 @@ class Fetch {
         .then(cb)
     }
 
+    handlers = (cb, ecb) => {
+        fetch(this.url+ 'handlers', {headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }}
+        )
+        .then(response => response.json())
+        .then(cb)
+        .catch(ecb)
+    }
+
+
 
     post = (data, cb, vcb) => {
 

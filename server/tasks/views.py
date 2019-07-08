@@ -16,7 +16,7 @@ from importlib import util
 import sys
 from os import path
 sys.path.append(path.join(path.dirname(path.abspath(__file__)), 'jobs'))
-import JobsSpecs
+from JobsSpecs import JobsSpecs
 
 class TaskViewSet(viewsets.ViewSet):
     serializer_class = serializer.TaskSerializer
@@ -95,7 +95,7 @@ def bulk(request):
     #print(request.POST['json_data'])
 
     try:
-        arg = request.POST['json_data']
+        arg = request.POST['arguments']
         arg = arg.replace("'", "\"")
         arg = json.loads(arg)
 

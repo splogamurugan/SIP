@@ -6,22 +6,35 @@ class Create extends Component {
 
     state = {
         fields : {
-            module: "Opportunities",
-            json_data: ''
+            job: '',
+            arguments: ''
         },
         errors: {
-            json_data: ''
+            arguments: ''
         },
 
         showalert: false,
         alert_type:'',
-        alert_message:''
+        alert_message:'',
+        jobs: [],
+        job_help: []
     }
 
     props = {
         fields: {
-            json_data: '[{"id": "12345", "created_by": "5678"}]'
+            arguments: '[{"id": "12345", "created_by": "5678"}]'
         }
+    }
+
+    componentDidMount = ()=> {
+        Fetch.handlers((data)=>{
+            this.setState({'jobs':data})
+            if (data.length > 0) {
+                this.setState({'job_help':data[0]['arguments']})
+            }
+        }, (validation_err) => {
+            this.showAlertMessage('danger', 'Not able to fetch jobs!')
+        })
     }
 
     isValidJson = (json) => {
@@ -43,8 +56,8 @@ class Create extends Component {
 
     validate = () => {
         const err = {}
-        if (!this.isValidJson(this.state.fields.json_data)) {
-            err['json_data'] = 'Invalid JSON!';
+        if (!this.isValidJson(this.state.fields.arguments)) {
+            err['arguments'] = 'Invalid JSON!';
         }
         return err
     }
@@ -61,13 +74,13 @@ class Create extends Component {
         }
 
         let postFields = this.state.fields;
-        //postFields = {"json_data":'[{"data":"data"}]'}
+        //postFields = {"arguments":'[{"data":"data"}]'}
         Fetch.post(postFields, (data)=>{
             console.log(data)
             if ('status' in data && data['status']==='error') {
                 this.showAlertMessage('danger', data['message'])
             } else {
-            this.showAlertMessage('success', 'Successfully Added')
+                this.showAlertMessage('success', 'Successfully Added')
             }
         }, (validation_err) => {
             this.showAlertMessage('danger', validation_err)
@@ -94,23 +107,26 @@ class Create extends Component {
         return(
             <form onSubmit={this.onFormSubmit}>
                 <div className="card">
-                    <div className="card-header"><span>Add Tasks</span> <Alert isActive={this.state.showalert} type={this.state.alert_type} message={this.state.alert_message} /> </div>
+                    <div className="card-header"><span>Add Queues</span> <Alert isActive={this.state.showalert} type={this.state.alert_type} message={this.state.alert_message} /> </div>
                     <div className="card-body">
-                        {/*
+                        
                         <div className="form-group">
-                            <label htmlFor="sel1">Module:</label>
-                            <select name="module" onChange={this.onInputChange} className="form-control" id="sel1">
-                                <option value="Opportunities">Opportunities</option>
-                                <option value="RevenueLineitems">Revenuelineitems</option>
-                                <option value="Contacts">Contacts</option>
+                            <label htmlFor="sel1">Job Name:</label>
+                            <select name="job" onChange={this.onInputChange} className="form-control" id="sel1">
+                                {
+                                    this.state.jobs.map((job,i)=>
+                                        <option key={i} value={job.name}>{job.name.slice(0, -3)}</option>
+                                    )
+                                }
                             </select>
                         </div>
-                        */}
+                        
                         <div className="form-group">
                             <label htmlFor="comment">Arguments[JSON Format]</label>
-                            <textarea value={this.state.fields.json_data} name="json_data" onChange={this.onInputChange} className="form-control" rows="5" id="comment"></textarea>
-                            {/*<span>{this.props.fields.json_data}</span>*/}
-                            <span style={{ color: 'red' }}>{ this.state.errors.json_data }</span>
+                            <textarea value={this.state.fields.arguments} name="arguments" onChange={this.onInputChange} className="form-control" rows="5" id="comment"></textarea>
+                            {/*<span>{this.props.fields.arguments}</span>*/}
+                            <span style={{ color: 'red' }}>{ this.state.errors.arguments }</span>
+                            <span>Accepts: {(this.state.job_help.length ? this.state.job_help.join(',') : '*')}</span>
                         </div>
                     </div> 
                     <div className="card-footer"><input type="submit" value="Submit" className="btn btn-primary"></input></div>
