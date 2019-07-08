@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
-from tasks.views import bulk, workers, stats
+from tasks.views import bulk, workers, stats, job_handlers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +36,9 @@ urlpatterns += [path('bulk', bulk, name='tasks_bulk')]
 urlpatterns += [path('workers', workers, name='tasks_workers')]
 
 urlpatterns += [path('stats', stats, name='tasks_stats')]
+
+urlpatterns += [path('handlers', job_handlers, name='tasks_job_handlers')]
+
 
 
 urlpatterns += [

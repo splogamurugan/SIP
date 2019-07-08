@@ -11,6 +11,13 @@ from django.conf import settings
 import json
 from json.decoder import JSONDecodeError
 
+from importlib import util
+
+import sys
+from os import path
+sys.path.append(path.join(path.dirname(path.abspath(__file__)), 'jobs'))
+import JobsSpecs
+
 class TaskViewSet(viewsets.ViewSet):
     serializer_class = serializer.TaskSerializer
     redisq = RedisQueue(settings.REDIS_URL)    
@@ -115,6 +122,11 @@ def workers(request):
 def stats(request):
     data = RedisQueue(settings.REDIS_URL).stats()
     return Response(data)
+
+@api_view(['GET'])
+def job_handlers(request):
+    j = JobsSpecs()
+    return Response(j.jobs())
 
     #return Response(status=status.HTTP_404_NOT_FOUND)
 
