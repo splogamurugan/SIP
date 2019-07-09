@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Item from './Item'
 import fetchData from '../lib/Fetch'
+import Detail from './Detail'
+
 class List extends Component {
     
     props = {
@@ -10,7 +12,24 @@ class List extends Component {
     state = {
         jobs : [],
         isLoading: true,
-        error: false
+        error: false,
+        detail: {
+            "show": false,
+            "job": {}
+        }
+    }
+
+    showDetail = (job) => {
+        const detail = this.state.detail
+        detail['job'] = job
+        detail['show'] = true
+        this.setState({ detail })
+    }
+
+    handleClose = () => {
+        const detail = this.state.detail
+        detail['show'] = false
+        this.setState({ detail })
     }
 
     render() {
@@ -27,11 +46,24 @@ class List extends Component {
         }
 
         return (
-            <div className="card-columns">
-            
+            <div>
+            <table className="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Arguments</th>
+                <th scope="col">Status</th>
+                <th scope="col">Result</th>
+                <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
             {jobs.map(job => 
-                <Item key={job.id} {...job} />
+                <Item onDetailClick={this.showDetail} key={job.id} {...job} />
             )}
+            </tbody>
+            </table>
+            <Detail handleClose={this.handleClose} show={this.state.detail.show} job={this.state.detail.job} />
             </div>
         )
     }

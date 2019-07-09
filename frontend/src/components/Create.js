@@ -139,14 +139,15 @@ class Create extends Component {
                         </div>
                         
                         <div className="form-group">
-                            <label htmlFor="comment">Arguments[JSON Format]</label>
+                            <label htmlFor="comment">Arguments [JSON Format] <span style={{ color: 'red' }}>{ this.state.errors.arguments }</span></label>
                             <textarea value={this.state.fields.arguments} name="arguments" onChange={this.onInputChange} className="form-control" rows="5" id="comment"></textarea>
                             {/*<span>{this.props.fields.arguments}</span>*/}
-                            <span style={{ color: 'red' }}>{ this.state.errors.arguments }</span>
                             <span>Accepts: {(this.state.job_help.length ? this.state.job_help.join(',') : '*')}</span>
                         </div>
+                        <div className="form-group">
+                        <input type="submit" value="Submit" className="btn btn-primary"></input>
+                        </div>
                     </div> 
-                    <div className="card-footer"><input type="submit" value="Submit" className="btn btn-primary"></input></div>
                 </div>
             </form>
         )

@@ -34,14 +34,19 @@ class App extends Component {
   render() {
     return (
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-3">
+          <Create />
+        </div>
+
+        <div className="col-md-6">
           <Dashboard stat_items={this.state.stat_items} />
         </div>
-        <div className="col-md-4">
-          <Create />
+
+        <div className="col-md-3">
           <Workers />
           <Stats stat_items={this.state.stat_items} />
         </div>
+        
       </div>
     );
   }
