@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+
+  server:
+    build: ./server
+    image: server
+    container_name: sip_server
+    ports:
+      - '8000:8000'
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./server:/usr/src/app
+    depends_on:
+      - redis
+
+  worker:
+    image: server
+    command: python manage.py handle_redis_queue worker
+    volumes:
+      - ./server:/usr/src/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:5.0-alpine
+    container_name: sip_redis
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: sip_frontend
+    links:
+     - server
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - '3000:3000'
+    command: npm start

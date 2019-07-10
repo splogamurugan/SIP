@@ -124,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://sip_frontend:3000', 'http://localhost:3000']
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -134,4 +134,4 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
-REDIS_URL = 'redis://localhost:6379/0'
+REDIS_URL = 'redis://sip_redis:6379/0'
