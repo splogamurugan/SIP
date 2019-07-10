@@ -48,7 +48,8 @@ class JobsSpecs():
                     all_arguments = inspect.getfullargspec(__ins.handle).args[1:]
                     handlers.append({
                         "name": i.name,
-                        "arguments": all_arguments
+                        "arguments": all_arguments,
+                        "document": inspect.getdoc(__ins),
                     })
 
         return handlers

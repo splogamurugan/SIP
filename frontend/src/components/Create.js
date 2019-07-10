@@ -17,7 +17,8 @@ class Create extends Component {
         alert_type:'',
         alert_message:'',
         jobs: [],
-        job_help: []
+        job_help: [],
+        job_document: ''
     }
 
     props = {
@@ -32,6 +33,7 @@ class Create extends Component {
             if (data.length > 0) {
                 this.setState({
                     'job_help': data[0]['arguments'],
+                    'job_document': data[0]['document']
                 })
 
                 const fields = this.state.fields
@@ -116,7 +118,10 @@ class Create extends Component {
                 job => evt.target.value === job.name
             )
             if (selected_job_arg.length > 0) {
-                this.setState({job_help: selected_job_arg[0]['arguments']})
+                this.setState({
+                    job_help: selected_job_arg[0]['arguments'],
+                    job_document: selected_job_arg[0]['document'],
+                })
                 //console.log(this.state.job_help[0])
             }
         }
@@ -142,11 +147,26 @@ class Create extends Component {
                             <label htmlFor="comment">Arguments [JSON Format] <span style={{ color: 'red' }}>{ this.state.errors.arguments }</span></label>
                             <textarea value={this.state.fields.arguments} name="arguments" onChange={this.onInputChange} className="form-control" rows="5" id="comment"></textarea>
                             {/*<span>{this.props.fields.arguments}</span>*/}
-                            <span>Accepts: {(this.state.job_help.length ? this.state.job_help.join(',') : '*')}</span>
+                            <span><strong>Accepts</strong> {(this.state.job_help.length ? this.state.job_help.join(',') : '*')}</span>
                         </div>
                         <div className="form-group">
                         <input type="submit" value="Submit" className="btn btn-primary"></input>
                         </div>
+                        <div className="form-group">
+                            
+                            <br />
+                            <span><strong>Job Help: </strong> <br />
+                            {this.state.job_document.split("\n").map((item) => {
+                                return (
+                                    <span>
+                                    {item}
+                                    <br />
+                                    </span>
+                                )})
+                            }
+                            </span>
+                        </div>
+                        
                     </div> 
                 </div>
             </form>
