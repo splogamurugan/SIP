@@ -8,23 +8,11 @@ class Sugar(JobsAbstract):
     Please look into the HELP section about how to post the data
 
         Single Entry (Single data): 
-        {"module":"Opportunities", 
-        "json_data":"{
-        "external_key": "XX-AAAAA", 
-        "account_id": "XXXXXXX", 
-        "id": "XX-AAAAA"}
+        {'job_handler': 'Sugar.py', 'arguments': {'module': 'Opportunities', 'json_data': {'external_key': 'XX-AAAAA', 'account_id': 'XXXXXXX', 'id': 'XX-AAAAA'}}}
 
         Multi Entries (Multi data): 
-        [{"module":"Opportunities", 
-        "json_data":"{
-        "external_key": "XX-AAAAA", 
-        "account_id": "XXXXXXX", 
-        "id": "XX-AAAAA"},
-        {"module":"Opportunities", 
-        "json_data":"{
-        "external_key": "XX-BBBB", 
-        "account_id": "XXXXXXX", 
-        "id": "XX-BBBB"}]
+        [{'job_handler': 'Sugar.py', 'arguments': {'module': 'Opportunities', 'json_data': {'external_key': 'XX-AAAAA', 'account_id': 'XXXXXXX', 'id': 'XX-AAAAA'}}},
+        {'job_handler': 'Sugar.py', 'arguments': {'module': 'Opportunities', 'json_data': {'external_key': 'XX-AAAAA', 'account_id': 'XXXXXXX', 'id': 'XX-AAAAA'}}}]
 
     '''
     def generateOAuthToken(self):
