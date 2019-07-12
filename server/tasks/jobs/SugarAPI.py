@@ -249,7 +249,7 @@ class SugarAPI:
 if __name__ == '__main__':
 
     s = SugarAPI(
-        'https://X-int01.sugarondemand.com', 
+        'https://X.sugarondemand.com', 
         'X', 
         'Y',
         'redis://sip_redis:6379/0'
