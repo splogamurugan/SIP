@@ -31,7 +31,7 @@ class Item extends Component{
                 <Badge status={this.props.status} />
             </td>
             <td>
-                {this.props.result}
+                {this.props.result ? this.props.result.slice(0, 100):''}
             </td>
             <td>
                 <a href="#"  className="badge badge-pill badge-danger">X </a>

@@ -36,6 +36,8 @@ class JobsSpecs():
 
         except AttributeError:
             pass
+        except TypeError:
+            pass
 
         return __ins
 

@@ -1,6 +1,14 @@
 from JobsAbstract import JobsAbstract
 import redis
 import time
+
+import sys
+from os.path import abspath
+from os.path import dirname
+sys.path.append(dirname(abspath(__file__)))
+
+from SugarAPI import SugarAPI
+
 class Sugar(JobsAbstract):
     '''
     A sugar CRM integration processor which accepts module and data(json_data) 
@@ -8,11 +16,11 @@ class Sugar(JobsAbstract):
     Please look into the HELP section about how to post the data
 
         Single Entry (Single data): 
-        {'job_handler': 'Sugar.py', 'arguments': {'module': 'Opportunities', 'json_data': {'external_key': 'XX-AAAAA', 'account_id': 'XXXXXXX', 'id': 'XX-AAAAA'}}}
+        {"module": "Tasks", "json_data": {"name": "XXXXX"}}
 
         Multi Entries (Multi data): 
-        [{'job_handler': 'Sugar.py', 'arguments': {'module': 'Opportunities', 'json_data': {'external_key': 'XX-AAAAA', 'account_id': 'XXXXXXX', 'id': 'XX-AAAAA'}}},
-        {'job_handler': 'Sugar.py', 'arguments': {'module': 'Opportunities', 'json_data': {'external_key': 'XX-AAAAA', 'account_id': 'XXXXXXX', 'id': 'XX-AAAAA'}}}]
+        [{"module": "Tasks", "json_data": {"name": "YYYYYY"}},
+        {"module": "Tasks", "json_data": {"name": "ZZZZZZ"}}]
 
     '''
     def generateOAuthToken(self):
@@ -25,8 +33,19 @@ class Sugar(JobsAbstract):
         return 0
 
     def handle(self, module:str, json_data:dict):
+        #time.sleep(2)
+        #print('its a dummy sugar')
+        #print(module, json_data)
+        s = SugarAPI(
+            'https://X-int01.sugarondemand.com', 
+            'U', 
+            'P',
+            'redis://sip_redis:6379/0'
+        )
+        #return s.upsert(module.capitalize(), json_data)
+
         time.sleep(2)
-        print('its a dummy sugar')
-        print(module, json_data)
-        return True
+        return 'A Fake Execution Result'
+
+        #return s.upsert(module.capitalize(), json_data)
     

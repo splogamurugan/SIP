@@ -33,7 +33,8 @@ services:
     links:
      - server
     volumes:
-      - ./frontend:/usr/src/app
+      - ./frontend/public:/usr/src/app/public
+      - ./frontend/src:/usr/src/app/src
     ports:
       - '3000:3000'
     command: npm start

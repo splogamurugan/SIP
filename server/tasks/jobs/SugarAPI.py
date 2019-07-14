@@ -15,10 +15,10 @@ class SugarAPI:
     password = ''
     url = ''
     _token = None
-    retry_on_failure = 1
+    retry_on_failure = 2
     retried = 0
     cache = False
-    redis_url = 'redis://localhost:6379/0'
+    redis_url = 'redis://sip_redis:6379/0'
     oauth_token_place_holder = 'oauth_token'
 
     def __init__(self, url, username, password, redis_url=None, oauth_token_place_holder='oauth_token'):
@@ -48,9 +48,13 @@ class SugarAPI:
             access_token_ = r.get(self.oauth_token_place_holder)
         
         try:
-            access_token_ = loads(access_token_)
+            access_token_ = loads(str(access_token_))
         except JSONDecodeError:
             pass
+
+        if (type(access_token_) is bytes):
+            access_token_ = access_token_.decode('ascii')
+            access_token_ = loads(access_token_)
 
         return access_token_
 
@@ -60,7 +64,10 @@ class SugarAPI:
         access_token_ = self.__token_yeilder()
         current_time_stamp = datetime.datetime.now().timestamp()
         #current_time_stamp = 1562953555.385923
+        
+        
 
+        print(access_token_)
         type(type(access_token_) is dict)
         try:
             if self.retried >= self.retry_on_failure:
@@ -213,7 +220,8 @@ class SugarAPI:
             #return ''
             response = requests.request(method, url, data=payload_, headers=headers)
             resp_ = loads(response.text)
-
+            print(self.token)
+            print(response.status_code)
             if (response.status_code == 200):
                 return resp_
             elif 'The access token provided is invalid' in response.text:
@@ -248,6 +256,9 @@ class SugarAPI:
     
 if __name__ == '__main__':
 
+    
+
+    '''
     s = SugarAPI(
         'https://X.sugarondemand.com', 
         'X', 
@@ -256,6 +267,7 @@ if __name__ == '__main__':
     )
 
     print(s.upsert('Tasks', {'name': "A new task"}))
+    '''
 
     '''
     def request_for_token():
