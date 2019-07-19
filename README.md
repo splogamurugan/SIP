@@ -30,7 +30,7 @@ docker-compose up -d --scale worker=5
 curl 'http://localhost:8000/bulk' -H 'Referer: http://localhost:3000/' -H 'Origin: http://localhost:3000' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36' -H 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundary5YV1vElELRLRP5sk' --data-binary $'------WebKitFormBoundary5YV1vElELRLRP5sk\r\nContent-Disposition: form-data; name="job"\r\n\r\nImageProcessor.py\r\n------WebKitFormBoundary5YV1vElELRLRP5sk\r\nContent-Disposition: form-data; name="arguments"\r\n\r\n{"image_path":"/var/www/html/image.png", \n"output_path":"/var/export"}\r\n------WebKitFormBoundary5YV1vElELRLRP5sk--\r\n' --compressed
 ```
 
-## To add a custom job
+## To add a custom job handler (Your own functionality)
 Please look into the a job handler SIP/server/tasks/jobs/ImageProcessor.py
 ```steps
 CP SIP/server/tasks/jobs/ImageProcessor.py SIP/server/tasks/jobs/YourProcessor.py
