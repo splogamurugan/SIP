@@ -1,5 +1,5 @@
 # Job Processing Platform (django + django_restframework + redis + redis queue + reactjs + docker)
-This provisions a platform to add any custom jobs and scale workers to process them. I have initially designed this to integrate sugarCRM application with any other enterprise application. However, this came up as a platform to add any job handler. It can be a Image processor, Video Processor, API caller, Scrapper, REST API call, or anything else.. 
+This provisions a platform to add any custom jobs and scale workers to process them. I have initially designed this to integrate sugarCRM application with any other enterprise application. However, this came up as a platform to add any job handler. It can be a Image processor, Video Processor, API caller, Web Scraper, REST API call, or anything else.. 
 
 It requires you to Add a job into the folder SIP/server/tasks/jobs/ and the job will be exposed to the API along with the required parameter list. Making a POST request to the API will ensure the job gets enqued and will be called with the supplied params. 
 
